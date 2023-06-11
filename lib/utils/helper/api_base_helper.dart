@@ -16,14 +16,14 @@ enum METHODE {
 }
 
 class ApiBaseHelper extends GetConnect {
-  final String _baseurl = "https://api.openai.com/v1/chat/completions/";
+  final String _baseurl = "https://api.openai.com/v1/";
   final String _organization = "org-Cs1eK5ltL4mAjPP4nGJpmPl2";
-  final String _token = "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";
-  Map<String, dynamic>? _body;
+  final String _token = "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";
+
   Future<dynamic> onNetworkRequesting({
     Map<String, String>? header,
-    required String model,
-    required String content,
+    Map<String, dynamic>? body,
+    required String url,
     required METHODE? methode,
     String tempToken = "",
     required bool isAuthorize,
@@ -40,24 +40,26 @@ class ApiBaseHelper extends GetConnect {
             'Accept': 'application/json',
           };
     try {
-      _body = {
-        "model": model,
-        "messages": [
-          {
-            "role": "user",
-            "content": content,
-          }
-        ]
-      };
+      //   required String model,
+      // required String content,
+      // _body = {
+      //   "model": model,
+      //   "messages": [
+      //     {
+      //       "role": "user",
+      //       "content": content,
+      //     }
+      //   ]
+      // };
+      final fullUrl = _baseurl + url;
       switch (methode) {
         case METHODE.get:
-          final response =
-              await get(_baseurl, headers: header ?? defaultHeader);
+          final response = await get(fullUrl, headers: header ?? defaultHeader);
           return _returnResponse(response);
         case METHODE.post:
-          if (_body != null) {
-            final response = await post(_baseurl, json.encode(_body),
-                headers: defaultHeader);
+          if (body != null) {
+            final response =
+                await post(fullUrl, json.encode(body), headers: defaultHeader);
             return _returnResponse(response);
           }
           return Future.error(
@@ -67,9 +69,9 @@ class ApiBaseHelper extends GetConnect {
           final response = await delete(_baseurl, headers: defaultHeader);
           return _returnResponse(response);
         case METHODE.update:
-          if (_body != null) {
+          if (body != null) {
             final response =
-                await put(_baseurl, json.encode(_body), headers: defaultHeader);
+                await put(fullUrl, json.encode(body), headers: defaultHeader);
             return _returnResponse(response);
           }
           return Future.error(

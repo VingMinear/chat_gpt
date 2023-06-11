@@ -11,8 +11,17 @@ class AppTheme {
       fontFamily: 'DMSans',
       primaryColor: AppColor.primaryDarkColor,
       highlightColor: AppColor.textFieldDarkColor,
+      canvasColor: AppColor.whiteColor,
       iconTheme: const IconThemeData(
         color: AppColor.iconDarkColor,
+      ),
+      textTheme: const TextTheme(
+        bodyLarge: AppTextStyle.txt16,
+        bodyMedium: AppTextStyle.txt14,
+        bodySmall: AppTextStyle.txt13,
+        headlineLarge: AppTextStyle.txt17,
+        headlineMedium: AppTextStyle.txt17,
+        headlineSmall: AppTextStyle.txt17,
       ),
       appBarTheme: const AppBarTheme(
         centerTitle: true,
@@ -32,6 +41,15 @@ class AppTheme {
       highlightColor: AppColor.textFieldLightColor,
       iconTheme: const IconThemeData(
         color: AppColor.iconLightColor,
+      ),
+      canvasColor: AppColor.darkColor,
+      textTheme: const TextTheme(
+        bodyLarge: AppTextStyle.txt16,
+        bodyMedium: AppTextStyle.txt14,
+        bodySmall: AppTextStyle.txt13,
+        headlineLarge: AppTextStyle.txt17,
+        headlineMedium: AppTextStyle.txt17,
+        headlineSmall: AppTextStyle.txt17,
       ),
       appBarTheme: const AppBarTheme(
         centerTitle: true,

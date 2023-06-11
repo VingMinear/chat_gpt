@@ -6,10 +6,11 @@ import 'package:flutter/material.dart';
 class ThemeProvider extends ChangeNotifier {
   ThemeMode? _themeMode;
   ThemeMode? get themeMode => _themeMode;
-
+  var switcher = true;
   void toggleTheme() async {
     debugPrint("swaping");
     if (_themeMode == ThemeMode.light) {
+      switcher = false;
       _themeMode = ThemeMode.dark;
       notifyListeners();
       await LocalStorage.storeData(
@@ -17,6 +18,7 @@ class ThemeProvider extends ChangeNotifier {
         value: "dark",
       );
     } else {
+      switcher = true;
       _themeMode = ThemeMode.light;
       notifyListeners();
       await LocalStorage.storeData(
@@ -24,6 +26,7 @@ class ThemeProvider extends ChangeNotifier {
         value: "light",
       );
     }
+    notifyListeners();
     var themeMode = LocalStorage.getStringData(key: "themeMode");
     debugPrint(" Theme Store : $themeMode");
   }
