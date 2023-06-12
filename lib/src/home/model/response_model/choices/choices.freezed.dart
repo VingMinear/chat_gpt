@@ -20,12 +20,14 @@ ChoicesModel _$ChoicesModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ChoicesModel {
-  @JsonKey(name: "message")
-  MessageModel? get message => throw _privateConstructorUsedError;
+  @JsonKey(name: "text")
+  String? get text => throw _privateConstructorUsedError;
   @JsonKey(name: "finish_reason")
   String? get finishReason => throw _privateConstructorUsedError;
   @JsonKey(name: "index")
   int? get index => throw _privateConstructorUsedError;
+  @JsonKey(name: "logprobs")
+  String? get logprobs => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,11 +42,10 @@ abstract class $ChoicesModelCopyWith<$Res> {
       _$ChoicesModelCopyWithImpl<$Res, ChoicesModel>;
   @useResult
   $Res call(
-      {@JsonKey(name: "message") MessageModel? message,
+      {@JsonKey(name: "text") String? text,
       @JsonKey(name: "finish_reason") String? finishReason,
-      @JsonKey(name: "index") int? index});
-
-  $MessageModelCopyWith<$Res>? get message;
+      @JsonKey(name: "index") int? index,
+      @JsonKey(name: "logprobs") String? logprobs});
 }
 
 /// @nodoc
@@ -60,15 +61,16 @@ class _$ChoicesModelCopyWithImpl<$Res, $Val extends ChoicesModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = freezed,
+    Object? text = freezed,
     Object? finishReason = freezed,
     Object? index = freezed,
+    Object? logprobs = freezed,
   }) {
     return _then(_value.copyWith(
-      message: freezed == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as MessageModel?,
+      text: freezed == text
+          ? _value.text
+          : text // ignore: cast_nullable_to_non_nullable
+              as String?,
       finishReason: freezed == finishReason
           ? _value.finishReason
           : finishReason // ignore: cast_nullable_to_non_nullable
@@ -77,19 +79,11 @@ class _$ChoicesModelCopyWithImpl<$Res, $Val extends ChoicesModel>
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
               as int?,
+      logprobs: freezed == logprobs
+          ? _value.logprobs
+          : logprobs // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $MessageModelCopyWith<$Res>? get message {
-    if (_value.message == null) {
-      return null;
-    }
-
-    return $MessageModelCopyWith<$Res>(_value.message!, (value) {
-      return _then(_value.copyWith(message: value) as $Val);
-    });
   }
 }
 
@@ -102,12 +96,10 @@ abstract class _$$_ChoicesModelCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: "message") MessageModel? message,
+      {@JsonKey(name: "text") String? text,
       @JsonKey(name: "finish_reason") String? finishReason,
-      @JsonKey(name: "index") int? index});
-
-  @override
-  $MessageModelCopyWith<$Res>? get message;
+      @JsonKey(name: "index") int? index,
+      @JsonKey(name: "logprobs") String? logprobs});
 }
 
 /// @nodoc
@@ -121,15 +113,16 @@ class __$$_ChoicesModelCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = freezed,
+    Object? text = freezed,
     Object? finishReason = freezed,
     Object? index = freezed,
+    Object? logprobs = freezed,
   }) {
     return _then(_$_ChoicesModel(
-      message: freezed == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as MessageModel?,
+      text: freezed == text
+          ? _value.text
+          : text // ignore: cast_nullable_to_non_nullable
+              as String?,
       finishReason: freezed == finishReason
           ? _value.finishReason
           : finishReason // ignore: cast_nullable_to_non_nullable
@@ -138,6 +131,10 @@ class __$$_ChoicesModelCopyWithImpl<$Res>
           ? _value.index
           : index // ignore: cast_nullable_to_non_nullable
               as int?,
+      logprobs: freezed == logprobs
+          ? _value.logprobs
+          : logprobs // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -146,26 +143,30 @@ class __$$_ChoicesModelCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_ChoicesModel implements _ChoicesModel {
   _$_ChoicesModel(
-      {@JsonKey(name: "message") this.message,
+      {@JsonKey(name: "text") this.text,
       @JsonKey(name: "finish_reason") this.finishReason,
-      @JsonKey(name: "index") this.index});
+      @JsonKey(name: "index") this.index,
+      @JsonKey(name: "logprobs") this.logprobs});
 
   factory _$_ChoicesModel.fromJson(Map<String, dynamic> json) =>
       _$$_ChoicesModelFromJson(json);
 
   @override
-  @JsonKey(name: "message")
-  final MessageModel? message;
+  @JsonKey(name: "text")
+  final String? text;
   @override
   @JsonKey(name: "finish_reason")
   final String? finishReason;
   @override
   @JsonKey(name: "index")
   final int? index;
+  @override
+  @JsonKey(name: "logprobs")
+  final String? logprobs;
 
   @override
   String toString() {
-    return 'ChoicesModel(message: $message, finishReason: $finishReason, index: $index)';
+    return 'ChoicesModel(text: $text, finishReason: $finishReason, index: $index, logprobs: $logprobs)';
   }
 
   @override
@@ -173,15 +174,18 @@ class _$_ChoicesModel implements _ChoicesModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$_ChoicesModel &&
-            (identical(other.message, message) || other.message == message) &&
+            (identical(other.text, text) || other.text == text) &&
             (identical(other.finishReason, finishReason) ||
                 other.finishReason == finishReason) &&
-            (identical(other.index, index) || other.index == index));
+            (identical(other.index, index) || other.index == index) &&
+            (identical(other.logprobs, logprobs) ||
+                other.logprobs == logprobs));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, message, finishReason, index);
+  int get hashCode =>
+      Object.hash(runtimeType, text, finishReason, index, logprobs);
 
   @JsonKey(ignore: true)
   @override
@@ -199,22 +203,26 @@ class _$_ChoicesModel implements _ChoicesModel {
 
 abstract class _ChoicesModel implements ChoicesModel {
   factory _ChoicesModel(
-      {@JsonKey(name: "message") final MessageModel? message,
+      {@JsonKey(name: "text") final String? text,
       @JsonKey(name: "finish_reason") final String? finishReason,
-      @JsonKey(name: "index") final int? index}) = _$_ChoicesModel;
+      @JsonKey(name: "index") final int? index,
+      @JsonKey(name: "logprobs") final String? logprobs}) = _$_ChoicesModel;
 
   factory _ChoicesModel.fromJson(Map<String, dynamic> json) =
       _$_ChoicesModel.fromJson;
 
   @override
-  @JsonKey(name: "message")
-  MessageModel? get message;
+  @JsonKey(name: "text")
+  String? get text;
   @override
   @JsonKey(name: "finish_reason")
   String? get finishReason;
   @override
   @JsonKey(name: "index")
   int? get index;
+  @override
+  @JsonKey(name: "logprobs")
+  String? get logprobs;
   @override
   @JsonKey(ignore: true)
   _$$_ChoicesModelCopyWith<_$_ChoicesModel> get copyWith =>

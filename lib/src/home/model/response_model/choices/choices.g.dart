@@ -8,16 +8,16 @@ part of 'choices.dart';
 
 _$_ChoicesModel _$$_ChoicesModelFromJson(Map<String, dynamic> json) =>
     _$_ChoicesModel(
-      message: json['message'] == null
-          ? null
-          : MessageModel.fromJson(json['message'] as Map<String, dynamic>),
+      text: json['text'] as String?,
       finishReason: json['finish_reason'] as String?,
       index: json['index'] as int?,
+      logprobs: json['logprobs'] as String?,
     );
 
 Map<String, dynamic> _$$_ChoicesModelToJson(_$_ChoicesModel instance) =>
     <String, dynamic>{
-      'message': instance.message,
+      'text': instance.text,
       'finish_reason': instance.finishReason,
       'index': instance.index,
+      'logprobs': instance.logprobs,
     };

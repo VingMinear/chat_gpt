@@ -6,7 +6,6 @@ import 'package:provider/provider.dart';
 import '../../../src/home/controller/home_provider.dart';
 
 class SplashScreenProvider extends ChangeNotifier {
-  bool repeat = true;
   fetchData(BuildContext context) async {
     final homeProivder = Provider.of<HomeProvider>(context);
     await homeProivder.fetchModels();
@@ -20,7 +19,7 @@ class SplashScreenProvider extends ChangeNotifier {
         },
       );
     }
-    repeat = false;
+
     notifyListeners();
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:chat_gpt/utils/helper/local_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_connect.dart';
 
@@ -16,9 +17,15 @@ enum METHODE {
 }
 
 class ApiBaseHelper extends GetConnect {
-  final String _baseurl = "https://api.openai.com/v1/";
-  final String _organization = "org-Cs1eK5ltL4mAjPP4nGJpmPl2";
-  final String _token = "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";
+  // final String _baseurl = "https://api.openai.com/v1/";
+  final String _baseurl = "https://api.pawan.krd/v1/";
+  // final String _organization = "org-Cs1eK5ltL4mAjPP4nGJpmPl2";
+  String _token = "pk-utKaapGKgegYVqAlLYZOieRWdoqEixJbvfnKspDrppEbPklA";
+  set token(String token) {
+    _token = token;
+    debugPrint("token has been set > $_token");
+    LocalStorage.storeData(key: "token", value: _token);
+  }
 
   Future<dynamic> onNetworkRequesting({
     Map<String, String>? header,
@@ -32,7 +39,6 @@ class ApiBaseHelper extends GetConnect {
         ? {
             "Accept": "application/json",
             'Content-Type': 'application/json',
-            "OpenAI-Organization": _organization,
             'Authorization': 'Bearer $_token',
           }
         : {
@@ -40,17 +46,6 @@ class ApiBaseHelper extends GetConnect {
             'Accept': 'application/json',
           };
     try {
-      //   required String model,
-      // required String content,
-      // _body = {
-      //   "model": model,
-      //   "messages": [
-      //     {
-      //       "role": "user",
-      //       "content": content,
-      //     }
-      //   ]
-      // };
       final fullUrl = _baseurl + url;
       switch (methode) {
         case METHODE.get:
@@ -80,6 +75,7 @@ class ApiBaseHelper extends GetConnect {
           break;
       }
     } catch (e) {
+      debugPrint("error on NetworkRequesting $e");
       return Future.error(e);
     }
   }
@@ -105,9 +101,12 @@ class ApiBaseHelper extends GetConnect {
             bodyString: json.decode(response.bodyString!)));
       case 400:
         debugPrint('400');
-        return Future.error(ErrorModel(
+        return Future.error(
+          ErrorModel(
             statusCode: response.statusCode,
-            bodyString: json.decode(response.bodyString!)));
+            bodyString: json.decode(response.bodyString!),
+          ),
+        );
       case 401:
         debugPrint('401');
 
@@ -130,6 +129,7 @@ class ApiBaseHelper extends GetConnect {
             statusCode: response.statusCode,
             bodyString: json.decode(response.bodyString!)));
       default:
+        debugPrint('Status code not found!\nbody not response');
         return Future.error(ErrorModel(
             statusCode: response.statusCode,
             bodyString: json.decode(response.bodyString!)));

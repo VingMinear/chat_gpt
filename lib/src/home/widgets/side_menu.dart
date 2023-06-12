@@ -41,11 +41,12 @@ class SideMenu extends StatelessWidget {
           color: context.theme.canvasColor,
         ),
         child: SafeArea(
+          bottom: true,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(10.0),
                 child: Column(
                   children: [
                     Row(
@@ -132,6 +133,7 @@ class SideMenu extends StatelessWidget {
                   Text("Copyright© N E A"),
                 ],
               ),
+              const SizedBox(height: 15),
             ],
           ),
         ),

@@ -3,7 +3,7 @@
    <application
         android:label="Chat GPT"
         android:name="${applicationName}"
-        android:icon="@mipmap/my_icon">
+        android:icon="@mipmap/icon">
         <activity
             android:name=".MainActivity"
             android:exported="true"

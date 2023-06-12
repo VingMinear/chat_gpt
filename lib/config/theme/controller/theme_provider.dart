@@ -34,8 +34,10 @@ class ThemeProvider extends ChangeNotifier {
   void getTheme() {
     var themeMode = LocalStorage.getStringData(key: "themeMode");
     if (themeMode == "dark") {
+      switcher = false;
       _themeMode = ThemeMode.dark;
     } else if (themeMode == "light") {
+      switcher = true;
       _themeMode = ThemeMode.light;
     } else {
       _themeMode = ThemeMode.light;

@@ -1,9 +1,6 @@
 import 'package:chat_gpt/constant/app_textstyle.dart';
 import 'package:chat_gpt/src/home/controller/home_provider.dart';
-import 'package:chat_gpt/src/home/model/chat_user/chat_user.dart';
-import 'package:chat_gpt/src/home/model/response_model/reponse_model.dart';
-import 'package:chat_gpt/src/home/widgets/bot_response.dart';
-import 'package:chat_gpt/src/home/widgets/my_response.dart';
+import 'package:chat_gpt/src/home/view/token_screen.dart';
 import 'package:chat_gpt/utils/widget/custom_textfiedl.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -15,7 +12,6 @@ import 'package:provider/provider.dart';
 
 import '../../../constant/app_color.dart';
 import '../../../utils/widget/custom_app_bar.dart';
-import '../widgets/selected.dart';
 import '../widgets/side_menu.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -26,10 +22,10 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
-    var textController = TextEditingController();
+
     return Scaffold(
       key: homeProvider.scaffoldKey,
-      drawerEdgeDragWidth: context.width * 0.5,
+      drawerEdgeDragWidth: context.width * 0.7,
       drawer: const SideMenu(),
       appBar: primaryAppBar(
         text: "Chat GPT",
@@ -37,74 +33,75 @@ class HomeScreen extends StatelessWidget {
         leading: IconButton(
           onPressed: () {
             homeProvider.scaffoldKey.currentState!.openDrawer();
+            FocusManager.instance.primaryFocus!.unfocus();
           },
           icon: const FaIcon(
             FontAwesomeIcons.barsStaggered,
             size: 23,
           ),
         ),
-        spaceLeft: 0,
+        spaceLeft: 5,
         actions: [
-          MaterialButton(
+          IconButton(
             onPressed: () {
-              Get.to(() => const Selected());
+              Get.to(
+                () => const TokenScreen(),
+                transition: Transition.rightToLeft,
+              );
+              Future.delayed(
+                const Duration(milliseconds: 400),
+                () {
+                  FocusManager.instance.primaryFocus!.unfocus();
+                },
+              );
             },
-            textColor: Colors.white,
-            child: const Text("Model"),
+            icon: const FaIcon(
+              FontAwesomeIcons.key,
+              size: 20,
+            ),
           ),
         ],
       ),
       body: Column(
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: homeProvider.listChatUser.length,
-                    itemBuilder: (context, index) {
-                      var user = homeProvider.listChatUser[index];
-                      ResponseModel bot = ResponseModel();
-                      if (!homeProvider.loadingAsking) {
-                        bot = homeProvider.listChatBot[index];
-                      }
-                      return Column(
-                        children: [
-                          MyResponse(text: user.text),
-                          if (!homeProvider.loadingAsking) ...{
-                            BotResponse(
-                              text: bot.choices?[0].message?.content ??
-                                  "Somting went wrong!",
-                            ),
-                          }
-                        ],
-                      );
-                    },
+          homeProvider.listChat.isEmpty
+              ? const Expanded(
+                  child: Center(
+                    child: Text("Chat is empty"),
                   ),
-                  // ListView.builder(
-                  //   shrinkWrap: true,
-                  //   itemCount: homeProvider.listChatBot.length,
-                  //   itemBuilder: (context, index) {
-                  //     var response = homeProvider.listChatBot[index];
-                  //     return BotResponse(
-                  //       text: response.choices![0].message!.content!,
-                  //     );
-                  //   },
-                  // ),
-                  if (homeProvider.loadingAsking) ...{
-                    LoadingAnimationWidget.staggeredDotsWave(
-                      color: const Color(0xFF8283BD),
-                      size: 25,
-                    )
-                  },
-                ],
-              ),
-            ),
-          ),
+                )
+              : Expanded(
+                  child: SingleChildScrollView(
+                    physics: const BouncingScrollPhysics(
+                      parent: AlwaysScrollableScrollPhysics(),
+                    ),
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        homeProvider.listChat.isEmpty
+                            ? const Text("Ask Something")
+                            : const SizedBox.shrink(),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.zero,
+                          itemCount: homeProvider.listChat.length,
+                          itemBuilder: (context, index) {
+                            var chat = homeProvider.listChat[index];
+                            return chat;
+                          },
+                        ),
+                        if (homeProvider.loadingAsking) ...{
+                          LoadingAnimationWidget.staggeredDotsWave(
+                            color: const Color(0xFF8283BD),
+                            size: 25,
+                          )
+                        },
+                      ],
+                    ),
+                  ),
+                ),
           Container(
             padding: const EdgeInsets.all(20).copyWith(top: 0),
             decoration: BoxDecoration(
@@ -117,32 +114,19 @@ class HomeScreen extends StatelessWidget {
               ],
             ),
             child: CustomTextField(
-              controller: textController,
+              maxLines: null,
+              controller: homeProvider.textController,
               hintText: "Send a message",
               style: AppTextStyle.txt15,
               enabledColor: AppColor.darkColor,
               focusedColor: AppColor.darkColor,
               fillColor: context.theme.highlightColor,
               onFieldSubmitted: (value) {
-                if (textController.text.isNotEmpty) {
-                  var chatUser = ChatUserModel(
-                    text: textController.text.trim(),
-                    dateTime: DateTime.now(),
-                  );
-                  homeProvider.askChatBot(chatUser: chatUser);
-                  textController.clear();
-                }
+                homeProvider.submit();
               },
               suffixIcon: IconButton(
                 onPressed: () {
-                  if (textController.text.isNotEmpty) {
-                    var chatUser = ChatUserModel(
-                      text: textController.text.trim(),
-                      dateTime: DateTime.now(),
-                    );
-                    homeProvider.askChatBot(chatUser: chatUser);
-                    textController.clear();
-                  }
+                  homeProvider.submit();
                 },
                 icon: Iconify(
                   Ph.paper_plane_right_fill,

@@ -14,6 +14,7 @@ class CustomTextField extends StatelessWidget {
     this.minLines,
     this.maxLength,
     this.onChanged,
+    this.maxLines,
     this.onTap,
     this.onTapOutside,
     this.onEditingComplete,
@@ -67,7 +68,7 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText = false;
   final bool autocorrect = true;
   final MaxLengthEnforcement? maxLengthEnforcement;
-  final int? maxLines = 1;
+  final int? maxLines;
   final int? minLines;
   final int? maxLength;
   final void Function(String)? onChanged;

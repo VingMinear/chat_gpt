@@ -31,14 +31,20 @@ dependencies:
   connectivity_plus: ^4.0.1
   url_launcher: ^6.1.11
   intl: ^0.18.1
-  flutter_native_splash: ^2.2.19
+  # flutter_native_splash: ^2.2.19
+  translator: ^0.1.7
+  fluttertoast: ^8.2.2
 
 # flutter_icons:
 #   android: true
 #   ios: true
 #   image_path: "assets/logo/chatGPT.png"
   
-
+# flutter_native_splash:
+#   android: true
+#   ios: true
+#   color: "#ffffff"
+#   image: "assets/logo/icon.png"
 
 dev_dependencies:
   flutter_test:

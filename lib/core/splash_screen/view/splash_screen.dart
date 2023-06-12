@@ -1,11 +1,15 @@
-import 'package:chat_gpt/constant/app_textstyle.dart';
+import 'dart:async';
+
+import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:chat_gpt/constant/app_color.dart';
+import 'package:chat_gpt/src/home/view/home_screen.dart';
 import 'package:chat_gpt/utils/view/internet_no_connection.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utils/helper/network_service.dart';
-import '../controller/splash_screen_provider.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -17,32 +21,59 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
+    Timer(const Duration(milliseconds: 4200), () {
+      Get.offAll(() {
+        return const HomeScreen();
+      });
+    });
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    var splashScreenProvider = Provider.of<SplashScreenProvider>(context);
     var networkProvider = Provider.of<NetworkStatus>(context);
-    SplashScreenProvider().fetchData(context);
+    // SplashScreenProvider().fetchData(context);
     return networkProvider == NetworkStatus.offline
         ? const InternetNoConnectionScreen()
         : Scaffold(
+            backgroundColor: AppColor.primaryLightColor,
             body: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: const EdgeInsets.all(20).copyWith(
+                top: context.width / 4,
+              ),
               child: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Lottie.asset(
                       "assets/lotties/brain.json",
-                      repeat: splashScreenProvider.repeat,
+                      onLoaded: (p0) {},
                     ),
-                    const Text(
-                      'Welcome to My ChatBot',
-                      textAlign: TextAlign.center,
-                      style: AppTextStyle.txt24,
+                    DefaultTextStyle(
+                      style: const TextStyle(
+                        fontSize: 30,
+                        color: AppColor.darkColor,
+                      ),
+                      child: AnimatedTextKit(
+                        animatedTexts: [
+                          FlickerAnimatedText(
+                            "Welcome",
+                            speed: const Duration(milliseconds: 600),
+                          ),
+                          FlickerAnimatedText(
+                            "to",
+                            speed: const Duration(milliseconds: 200),
+                          ),
+                          FlickerAnimatedText(
+                            "Chat GPT",
+                            speed: const Duration(milliseconds: 600),
+                          ),
+                        ],
+                        repeatForever: true,
+                      ),
                     ),
+                    const Spacer(),
+                    const Text("Copyright© N E A"),
                   ],
                 ),
               ),

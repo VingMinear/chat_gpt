@@ -1,22 +1,48 @@
 import 'package:chat_gpt/src/home/model/chat_user/chat_user.dart';
-import 'package:chat_gpt/src/home/model/response_model/reponse_model.dart';
 import 'package:chat_gpt/src/home/repository/home_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 import '../model/chat_gpt_model/chat_gpt_model.dart';
+import '../widgets/chat_response.dart';
 
 class HomeProvider extends ChangeNotifier with HomeRepository {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List<String> dropdownItems = [];
-  List<ChatUserModel> listChatUser = [];
-  List<ResponseModel> listChatBot = [];
+  var textController = TextEditingController();
+  // List<ChatUserModel> listChatUser = [];
+  List<ChatResponse> listChat = [];
+  // List<ResponseModel> listChatBot = [];
   String selectedItem = "";
   List<ChatGPTModel> listData = [];
   bool loadingAsking = false;
+  bool show = false;
+  void onChanged(String value) {
+    if (value.isNotEmpty) {
+      show = true;
+    } else {
+      show = false;
+    }
+  }
+
   void clearChat() {
-    listChatUser.clear();
-    listChatBot.clear();
+    listChat.clear();
+    // listChatUser.clear();
+    // listChatBot.clear();
     notifyListeners();
+  }
+
+  void submit() {
+    if (textController.text.isNotEmpty) {
+      var chatUser = ChatUserModel(
+        text: textController.text.trim(),
+        dateTime: DateTime.now(),
+      );
+      askChatBot(chatUser: chatUser);
+      textController.clear();
+    } else {
+      Fluttertoast.showToast(msg: "Please Input Something");
+    }
   }
 
   Future<void> askChatBot({
@@ -25,11 +51,31 @@ class HomeProvider extends ChangeNotifier with HomeRepository {
     loadingAsking = true;
     notifyListeners();
     try {
-      listChatUser.add(chatUser);
+      listChat.add(
+        ChatResponse(
+          text: chatUser.text,
+          responseAs: ResponseAs.human,
+        ),
+      );
       await askingChatBot(chatUser.text).then(
         (response) {
           debugPrint("resonse : $response");
-          listChatBot.add(response);
+          // listChatBot.add(response);
+          if (response.object == null) {
+            listChat.add(
+              const ChatResponse(
+                text: "Something went wrong !",
+                responseAs: ResponseAs.bot,
+              ),
+            );
+          } else {
+            listChat.add(
+              ChatResponse(
+                text: response.choices![0].text!.substring(2),
+                responseAs: ResponseAs.bot,
+              ),
+            );
+          }
         },
       );
     } catch (error) {
@@ -45,12 +91,14 @@ class HomeProvider extends ChangeNotifier with HomeRepository {
     try {
       dropdownItems.clear();
       await fetchModelsRepository().then((respone) {
-        respone.map((element) {
-          debugPrint("elememnt ${element.id}");
-          listData.add(element);
-          dropdownItems.add(element.id!);
-        }).toList();
-        selectedItem = dropdownItems[0];
+        if (respone.isNotEmpty) {
+          respone.map((element) {
+            debugPrint("elememnt ${element.id}");
+            listData.add(element);
+            dropdownItems.add(element.id!);
+          }).toList();
+          selectedItem = dropdownItems[0];
+        }
       });
     } catch (error) {
       debugPrint(
