@@ -8,8 +8,6 @@ class CustomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const primaryColor = Color(0xff4338CA);
-    const secondaryColor = Color(0xff6D28D9);
     const accentColor = Color(0xffffffff);
 
     const double borderRadius = 15;
@@ -18,9 +16,7 @@ class CustomButton extends StatelessWidget {
         position: DecorationPosition.background,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(borderRadius),
-          gradient: const LinearGradient(
-            colors: [primaryColor, secondaryColor],
-          ),
+          color: Colors.green.shade300,
         ),
         child: TextButton(
           onPressed: onPressed,

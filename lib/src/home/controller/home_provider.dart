@@ -69,12 +69,21 @@ class HomeProvider extends ChangeNotifier with HomeRepository {
               ),
             );
           } else {
-            listChat.add(
-              ChatResponse(
-                text: response.choices![0].text!.substring(2),
-                responseAs: ResponseAs.bot,
-              ),
-            );
+            if (response.choices![0].text!.substring(0, 2).contains("\n\n")) {
+              listChat.add(
+                ChatResponse(
+                  text: response.choices![0].text!.substring(2),
+                  responseAs: ResponseAs.bot,
+                ),
+              );
+            } else {
+              listChat.add(
+                ChatResponse(
+                  text: response.choices![0].text!,
+                  responseAs: ResponseAs.bot,
+                ),
+              );
+            }
           }
         },
       );

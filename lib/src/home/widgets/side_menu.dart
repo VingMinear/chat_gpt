@@ -2,7 +2,6 @@ import 'package:chat_gpt/constant/app_textstyle.dart';
 import 'package:chat_gpt/src/home/widgets/toggle_switcher.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -16,16 +15,6 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var listMenu = [
-      const FaIcon(FontAwesomeIcons.house),
-      const FaIcon(FontAwesomeIcons.phone),
-      const FaIcon(FontAwesomeIcons.circleQuestion),
-    ];
-    var listMenuTitles = [
-      "Home",
-      "Contact Us",
-      "About Us",
-    ];
     var divider = Divider(
       color: context.theme.canvasColor,
       height: 30,
@@ -95,41 +84,21 @@ class SideMenu extends StatelessWidget {
                   Navigator.pop(context);
                 },
                 leading: Icon(
-                  CupertinoIcons.clear,
+                  CupertinoIcons.delete,
                   color: context.theme.canvasColor,
-                  size: 29,
+                  size: 25,
                 ),
-                title: const Text("Clear Chat"),
-              ),
-              Column(
-                children: List.generate(listMenuTitles.length, (index) {
-                  return ListTile(
-                    iconColor: context.theme.canvasColor,
-                    leading: listMenu[index],
-                    onTap: () {
-                      Navigator.pop(context);
-                      switch (index) {
-                        case 0:
-                          // Navigator.pop(context);
-                          break;
-                        case 1:
-                          break;
-                        case 2:
-                          break;
-                        default:
-                          break;
-                      }
-                    },
-                    title: Text(listMenuTitles[index]),
-                  );
-                }).toList(),
+                title: Text(
+                  "Clear Chat",
+                  style: TextStyle(color: context.theme.canvasColor),
+                ),
               ),
               const Spacer(),
               divider,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: const [
-                  Text("Verson : 0.0.1"),
+                  Text("Verson : 0.1.1"),
                   Text("Copyright© N E A"),
                 ],
               ),
