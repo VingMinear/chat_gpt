@@ -77,10 +77,12 @@ class ChatResponse extends StatelessWidget {
                         animatedTexts: [
                           TypewriterAnimatedText(
                             text,
-                            speed: const Duration(milliseconds: 44),
+                            speed:
+                                Duration(milliseconds: duration(text.length)),
+                            cursor: "",
                           ),
                         ],
-                        totalRepeatCount: 0,
+                        totalRepeatCount: 1,
                         repeatForever: false,
                       ),
               ),
@@ -89,5 +91,21 @@ class ChatResponse extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  int duration(int length) {
+    if (length < 50) {
+      debugPrint("spedd 77");
+      return 77;
+    } else if (length < 130) {
+      debugPrint("spedd 60");
+      return 60;
+    } else if (length < 200) {
+      debugPrint("spedd 40");
+      return 50;
+    } else {
+      debugPrint("spedd 50");
+      return 45;
+    }
   }
 }

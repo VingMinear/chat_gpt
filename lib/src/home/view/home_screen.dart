@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:chat_gpt/constant/app_textstyle.dart';
 import 'package:chat_gpt/src/home/controller/home_provider.dart';
 import 'package:chat_gpt/src/home/view/token_screen.dart';
@@ -22,7 +24,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final homeProvider = Provider.of<HomeProvider>(context);
-
+    var scrollController = ScrollController();
     return Scaffold(
       key: homeProvider.scaffoldKey,
       drawerEdgeDragWidth: context.width * 0.7,
@@ -72,6 +74,7 @@ class HomeScreen extends StatelessWidget {
                 )
               : Expanded(
                   child: SingleChildScrollView(
+                    controller: scrollController,
                     physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics(),
                     ),
@@ -117,6 +120,17 @@ class HomeScreen extends StatelessWidget {
               maxLines: null,
               controller: homeProvider.textController,
               hintText: "Send a message",
+              onTap: () async {
+                if (homeProvider.listChat.isNotEmpty) {
+                  debugPrint("auto scroll");
+                  // wait keyboard up
+                  scrollController.animateTo(
+                    scrollController.position.maxScrollExtent,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.fastOutSlowIn,
+                  );
+                }
+              },
               style: AppTextStyle.txt15,
               enabledColor: AppColor.darkColor,
               focusedColor: AppColor.darkColor,
@@ -127,6 +141,13 @@ class HomeScreen extends StatelessWidget {
               suffixIcon: IconButton(
                 onPressed: () {
                   homeProvider.submit();
+                  if (homeProvider.textController.text.isNotEmpty) {
+                    scrollController.animateTo(
+                      scrollController.position.maxScrollExtent,
+                      duration: const Duration(milliseconds: 500),
+                      curve: Curves.fastOutSlowIn,
+                    );
+                  }
                 },
                 icon: Iconify(
                   Ph.paper_plane_right_fill,
