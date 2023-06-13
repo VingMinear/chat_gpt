@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class CustomAvatar extends StatelessWidget {
   const CustomAvatar({
@@ -16,6 +17,9 @@ class CustomAvatar extends StatelessWidget {
       width: size,
       height: size,
       decoration: BoxDecoration(
+        border: Border.all(
+          color: context.theme.canvasColor,
+        ),
         shape: BoxShape.circle,
         image: imgPath == null
             ? DecorationImage(

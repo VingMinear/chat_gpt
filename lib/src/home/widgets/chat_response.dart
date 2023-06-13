@@ -47,7 +47,7 @@ class ChatResponse extends StatelessWidget {
               Fluttertoast.showToast(
                 msg: "Text Copied to Clipboard",
                 toastLength: Toast.LENGTH_SHORT,
-                gravity: ToastGravity.CENTER,
+                gravity: ToastGravity.BOTTOM,
                 timeInSecForIosWeb: 1,
                 backgroundColor: Colors.white.withOpacity(0.2),
                 textColor: Colors.white,
@@ -95,17 +95,13 @@ class ChatResponse extends StatelessWidget {
 
   int duration(int length) {
     if (length < 50) {
-      debugPrint("spedd 77");
-      return 77;
-    } else if (length < 130) {
-      debugPrint("spedd 60");
-      return 60;
-    } else if (length < 200) {
-      debugPrint("spedd 40");
       return 50;
+    } else if (length < 130) {
+      return 46;
+    } else if (length < 170) {
+      return 43;
     } else {
-      debugPrint("spedd 50");
-      return 45;
+      return 34;
     }
   }
 }

@@ -6,9 +6,9 @@ import '../../constant/app_color.dart';
 class AppTheme {
   //-------------------------------DarkTheme-------------------------------//
   static ThemeData darkTheme() {
-    return ThemeData(
+    return ThemeData.dark().copyWith(
       scaffoldBackgroundColor: AppColor.primaryDarkColor,
-      fontFamily: 'DMSans',
+      // fontFamily: 'DMSans',
       primaryColor: AppColor.primaryDarkColor,
       highlightColor: AppColor.textFieldDarkColor,
       canvasColor: AppColor.whiteColor,
@@ -34,8 +34,7 @@ class AppTheme {
 
   //-------------------------------LightTheme-------------------------------//
   static ThemeData lightTheme() {
-    return ThemeData(
-      fontFamily: 'DMSans',
+    return ThemeData.light().copyWith(
       scaffoldBackgroundColor: AppColor.primaryLightColor,
       primaryColor: AppColor.primaryLightColor,
       highlightColor: AppColor.textFieldLightColor,

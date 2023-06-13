@@ -123,14 +123,14 @@ class CustomTextField extends StatelessWidget {
         prefixIconConstraints: prefixIconConstraints,
         hintStyle: TextStyle(color: Colors.grey.withOpacity(.75)),
         contentPadding:
-            const EdgeInsets.symmetric(vertical: 0.0, horizontal: 20.0),
+            const EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
         border: OutlineInputBorder(
           borderSide: BorderSide(color: borderColor ?? Colors.grey, width: 0.3),
           borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-              color: focusedColor ?? context.theme.primaryColor, width: 0.3),
+              color: focusedColor ?? context.theme.canvasColor, width: 0.3),
           borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         ),
         errorBorder: OutlineInputBorder(
@@ -139,7 +139,7 @@ class CustomTextField extends StatelessWidget {
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-              color: enabledColor ?? context.theme.primaryColor, width: 0.3),
+              color: enabledColor ?? context.theme.canvasColor, width: 0.3),
           borderRadius: const BorderRadius.all(Radius.circular(10.0)),
         ),
       ),

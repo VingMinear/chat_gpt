@@ -17,10 +17,10 @@ enum METHODE {
 }
 
 class ApiBaseHelper extends GetConnect {
-  // final String _baseurl = "https://api.openai.com/v1/";
-  final String _baseurl = "https://api.pawan.krd/v1/";
+  final String _baseurl = "https://api.openai.com/v1/";
+  // final String _baseurl = "https://api.pawan.krd/v1/";
   // final String _organization = "org-Cs1eK5ltL4mAjPP4nGJpmPl2";
-  String _token = "pk-utKaapGKgegYVqAlLYZOieRWdoqEixJbvfnKspDrppEbPklA";
+  String _token = "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";
   set token(String token) {
     _token = token;
     debugPrint("token has been set > $_token");

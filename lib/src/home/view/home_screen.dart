@@ -75,6 +75,7 @@ class HomeScreen extends StatelessWidget {
               : Expanded(
                   child: SingleChildScrollView(
                     controller: scrollController,
+                    reverse: true,
                     physics: const BouncingScrollPhysics(
                       parent: AlwaysScrollableScrollPhysics(),
                     ),
@@ -122,32 +123,44 @@ class HomeScreen extends StatelessWidget {
               hintText: "Send a message",
               onTap: () async {
                 if (homeProvider.listChat.isNotEmpty) {
-                  debugPrint("auto scroll");
-                  // wait keyboard up
                   scrollController.animateTo(
-                    scrollController.position.maxScrollExtent,
+                    0,
                     duration: const Duration(milliseconds: 500),
                     curve: Curves.fastOutSlowIn,
                   );
                 }
               },
+              prefixIconColor: context.theme.canvasColor,
+              prefixIcon: homeProvider.clearIcon
+                  ? IconButton(
+                      onPressed: () {
+                        homeProvider.clearIcon = false;
+                        homeProvider.textController.clear();
+                        homeProvider.update();
+                      },
+                      icon: const Icon(
+                        Icons.clear_rounded,
+                      ),
+                    )
+                  : null,
               style: AppTextStyle.txt15,
-              enabledColor: AppColor.darkColor,
-              focusedColor: AppColor.darkColor,
+              enabledColor: context.theme.canvasColor,
+              focusedColor: context.theme.canvasColor,
               fillColor: context.theme.highlightColor,
               onFieldSubmitted: (value) {
                 homeProvider.submit();
               },
+              onChanged: (p0) {
+                if (p0.trim().isNotEmpty) {
+                  homeProvider.clearIcon = true;
+                } else {
+                  homeProvider.clearIcon = false;
+                }
+                homeProvider.update();
+              },
               suffixIcon: IconButton(
                 onPressed: () {
                   homeProvider.submit();
-                  if (homeProvider.textController.text.isNotEmpty) {
-                    scrollController.animateTo(
-                      scrollController.position.maxScrollExtent,
-                      duration: const Duration(milliseconds: 500),
-                      curve: Curves.fastOutSlowIn,
-                    );
-                  }
                 },
                 icon: Iconify(
                   Ph.paper_plane_right_fill,

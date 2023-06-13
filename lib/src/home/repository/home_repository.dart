@@ -35,13 +35,19 @@ class HomeRepository {
 
   Future<ResponseModel> askingChatBot(String content) async {
     ResponseModel data = ResponseModel();
+
     try {
       await _apiBaseHelper
           .onNetworkRequesting(
-        url: "completions",
+        url: "chat/completions",
         body: {
           "model": "gpt-3.5-turbo",
-          "prompt": content,
+          "messages": [
+            {
+              "role": "user",
+              "content": content,
+            }
+          ]
         },
         methode: METHODE.post,
         isAuthorize: true,
@@ -51,16 +57,16 @@ class HomeRepository {
       }).onError((ErrorModel error, stackTrace) {
         debugPrint("response: ${error.bodyString}");
         var message = error.bodyString as Map<String, dynamic>;
-        if (message["error"]["message"]
+        if (message["error"]["code"]
             .toString()
             .contains("Your API key is not allowed to be used")) {
           alertErrorSnackbar(
             title: "UnAuthorization",
             message: "Token has been expired",
           );
-        } else if (message["error"]["message"]
+        } else if (message["error"]["code"]
             .toString()
-            .contains("Invalid API key")) {
+            .contains("invalid_api_key")) {
           alertErrorSnackbar(
             title: "UnAuthorization",
             message: "Token is Invalid",
