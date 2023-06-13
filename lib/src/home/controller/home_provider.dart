@@ -1,28 +1,38 @@
 import 'package:chat_gpt/src/home/model/chat_user/chat_user.dart';
 import 'package:chat_gpt/src/home/repository/home_repository.dart';
+import 'package:chat_gpt/utils/helper/local_storage.dart';
+import 'package:chat_gpt/utils/helper/translator.dart';
+import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 import '../model/chat_gpt_model/chat_gpt_model.dart';
 import '../widgets/chat_response.dart';
 
 class HomeProvider extends ChangeNotifier with HomeRepository {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
   List<String> dropdownItems = [];
   var textController = TextEditingController();
-  // List<ChatUserModel> listChatUser = [];
+  var clearIcon = false;
   List<ChatResponse> listChat = [];
-  // List<ResponseModel> listChatBot = [];
   String selectedItem = "";
   List<ChatGPTModel> listData = [];
   bool loadingAsking = false;
   bool show = false;
+  int selectedLanIndex = 0;
   void onChanged(String value) {
     if (value.isNotEmpty) {
       show = true;
     } else {
       show = false;
     }
+  }
+
+  void update() {
+    notifyListeners();
   }
 
   void clearChat() {
@@ -33,7 +43,8 @@ class HomeProvider extends ChangeNotifier with HomeRepository {
   }
 
   void submit() {
-    if (textController.text.isNotEmpty) {
+    if (textController.text.trim().isNotEmpty) {
+      clearIcon = false;
       var chatUser = ChatUserModel(
         text: textController.text.trim(),
         dateTime: DateTime.now(),
@@ -58,7 +69,7 @@ class HomeProvider extends ChangeNotifier with HomeRepository {
         ),
       );
       await askingChatBot(chatUser.text).then(
-        (response) {
+        (response) async {
           debugPrint("resonse : $response");
           // listChatBot.add(response);
           if (response.object == null) {
@@ -69,21 +80,15 @@ class HomeProvider extends ChangeNotifier with HomeRepository {
               ),
             );
           } else {
-            if (response.choices![0].text!.substring(0, 2).contains("\n\n")) {
-              listChat.add(
-                ChatResponse(
-                  text: response.choices![0].text!.substring(2),
-                  responseAs: ResponseAs.bot,
-                ),
-              );
-            } else {
-              listChat.add(
-                ChatResponse(
-                  text: response.choices![0].text!,
-                  responseAs: ResponseAs.bot,
-                ),
-              );
-            }
+            var textTranslate = await TranslatorService.translate(
+              response.choices![0].message!.content!,
+            );
+            listChat.add(
+              ChatResponse(
+                text: textTranslate,
+                responseAs: ResponseAs.bot,
+              ),
+            );
           }
         },
       );
@@ -119,5 +124,71 @@ class HomeProvider extends ChangeNotifier with HomeRepository {
   selectedItems(String item) {
     selectedItem = item;
     notifyListeners();
+  }
+
+  updateLanguage(int index) {}
+
+  changeLanguage(
+    BuildContext context,
+  ) async {
+    var listText = [
+      "English",
+      "Khmer",
+    ];
+    var listFlags = [
+      const Flag.fromString(
+        "gb",
+        width: 20,
+        height: 20,
+      ),
+      const Flag.fromString(
+        "kh",
+        width: 20,
+        height: 20,
+      ),
+    ];
+    await showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(
+          top: Radius.circular(20),
+        ),
+      ),
+      builder: (context) {
+        var homeProvider = Provider.of<HomeProvider>(context);
+        return Padding(
+          padding: const EdgeInsets.all(15).copyWith(
+            bottom: context.mediaQueryViewPadding.bottom,
+          ),
+          child: Wrap(
+            children: List.generate(
+              2,
+              (index) {
+                return ListTile(
+                  leading: listFlags[index],
+                  title: Text(listText[index]),
+                  onTap: () async {
+                    homeProvider.selectedLanIndex = index;
+                    notifyListeners();
+                    Navigator.pop(context);
+                    await LocalStorage.storeData(
+                      key: "language",
+                      value: homeProvider.selectedLanIndex,
+                    );
+                  },
+                  trailing: Icon(
+                    index == selectedLanIndex
+                        ? Icons.circle_rounded
+                        : Icons.circle_outlined,
+                    size: 15,
+                    color: Colors.green,
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      },
+    );
   }
 }
