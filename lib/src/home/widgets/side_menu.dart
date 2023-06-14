@@ -1,6 +1,7 @@
 import 'package:chat_gpt/constant/app_textstyle.dart';
 import 'package:chat_gpt/src/home/widgets/toggle_switcher.dart';
 import 'package:chat_gpt/utils/helper/url_launcher.dart';
+import 'package:chat_gpt/utils/view/photo_view_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -71,10 +72,22 @@ class SideMenu extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        const CustomAvatar(
-                          size: 80,
-                          imgUrl:
-                              "https://lh3.googleusercontent.com/a/AAcHTtcFBSTxsFGglWTNzd-aqEkkqq9qUoxS7GD19zR0bg=s576-c-no",
+                        GestureDetector(
+                          onTap: () {
+                            Get.to(
+                              () {
+                                return const PhotoViewScreen(
+                                  imageUrl:
+                                      "https://lh3.googleusercontent.com/a/AAcHTtcFBSTxsFGglWTNzd-aqEkkqq9qUoxS7GD19zR0bg=s576-c-no",
+                                );
+                              },
+                            );
+                          },
+                          child: const CustomAvatar(
+                            size: 80,
+                            imgUrl:
+                                "https://lh3.googleusercontent.com/a/AAcHTtcFBSTxsFGglWTNzd-aqEkkqq9qUoxS7GD19zR0bg=s576-c-no",
+                          ),
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,

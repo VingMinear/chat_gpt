@@ -1,6 +1,5 @@
 import 'package:chat_gpt/config/providers/providers.dart';
 import 'package:chat_gpt/config/theme/theme.dart';
-import 'package:chat_gpt/src/home/controller/home_provider.dart';
 import 'package:chat_gpt/utils/controller/global_key.dart';
 import 'package:chat_gpt/utils/helper/api_base_helper.dart';
 import 'package:chat_gpt/utils/view/dismiss_keyboard.dart';
@@ -19,14 +18,12 @@ void main() async {
   // if i put here it not working
   // ThemeProvider().getTheme();
   var token = LocalStorage.getStringData(key: "token");
-  var language = LocalStorage.getIntData(key: "language");
+
   if (token.isNotEmpty) {
     ApiBaseHelper().token = token;
     debugPrint("token > $token");
   }
-  if (language != 0) {
-    HomeProvider().selectedLanIndex = language;
-  }
+
   runApp(
     const MyApp(),
   );

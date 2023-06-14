@@ -1,12 +1,15 @@
 import 'package:chat_gpt/src/home/controller/token_provider.dart';
 import 'package:chat_gpt/utils/helper/alerting.dart';
 import 'package:chat_gpt/utils/helper/api_base_helper.dart';
+import 'package:chat_gpt/utils/view/web_view.dart';
 import 'package:chat_gpt/utils/widget/custom_app_bar.dart';
 import 'package:chat_gpt/utils/widget/custom_textfiedl.dart';
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../../utils/controller/web_view_provider.dart';
 import '../../../utils/widget/custom_button.dart';
 
 class TokenScreen extends StatelessWidget {
@@ -15,8 +18,24 @@ class TokenScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var tokenProvider = Provider.of<TokenProvider>(context);
+    var webProvider = Provider.of<WebViewProvider>(context);
     return Scaffold(
-      appBar: primaryAppBar(text: "Token"),
+      appBar: primaryAppBar(
+        text: "Token",
+        actions: [
+          IconButton(
+            onPressed: () {
+              Get.to(
+                () => const WebViewScreen(),
+              );
+              webProvider.webLoading(true);
+            },
+            icon: const FaIcon(
+              FontAwesomeIcons.earthAmericas,
+            ),
+          ),
+        ],
+      ),
       body: Padding(
         padding: const EdgeInsets.all(25.0),
         child: Column(

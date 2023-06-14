@@ -1,6 +1,5 @@
 import 'package:chat_gpt/src/home/model/chat_user/chat_user.dart';
 import 'package:chat_gpt/src/home/repository/home_repository.dart';
-import 'package:chat_gpt/utils/helper/local_storage.dart';
 import 'package:chat_gpt/utils/helper/translator.dart';
 import 'package:flag/flag.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +7,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
+import '../../../utils/helper/local_storage.dart';
 import '../model/chat_gpt_model/chat_gpt_model.dart';
 import '../widgets/chat_response.dart';
 
@@ -22,7 +22,12 @@ class HomeProvider extends ChangeNotifier with HomeRepository {
   List<ChatGPTModel> listData = [];
   bool loadingAsking = false;
   bool show = false;
-  int selectedLanIndex = 0;
+  int? selectedLanIndex;
+  void getLangLocalStorage() {
+    var language = LocalStorage.getIntData(key: "language");
+    selectedLanIndex = language;
+  }
+
   void onChanged(String value) {
     if (value.isNotEmpty) {
       show = true;
@@ -80,9 +85,17 @@ class HomeProvider extends ChangeNotifier with HomeRepository {
               ),
             );
           } else {
-            var textTranslate = await TranslatorService.translate(
-              response.choices![0].message!.content!,
-            );
+            String textTranslate;
+            if (selectedLanIndex == 0) {
+              debugPrint("no translation");
+              textTranslate = response.choices![0].message!.content!;
+            } else {
+              debugPrint("translate");
+              textTranslate = await TranslatorService.translate(
+                response.choices![0].message!.content!,
+                Language.khmer,
+              );
+            }
             listChat.add(
               ChatResponse(
                 text: textTranslate,
@@ -169,6 +182,7 @@ class HomeProvider extends ChangeNotifier with HomeRepository {
                   title: Text(listText[index]),
                   onTap: () async {
                     homeProvider.selectedLanIndex = index;
+                    debugPrint("lang:${homeProvider.selectedLanIndex}");
                     notifyListeners();
                     Navigator.pop(context);
                     await LocalStorage.storeData(

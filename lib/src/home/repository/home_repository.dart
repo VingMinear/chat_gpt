@@ -55,7 +55,7 @@ class HomeRepository {
           .then((response) {
         data = ResponseModel.fromJson(response);
       }).onError((ErrorModel error, stackTrace) {
-        debugPrint("response: ${error.bodyString}");
+        debugPrint("response: Error -->${error.bodyString}");
         var message = error.bodyString as Map<String, dynamic>;
         if (message["error"]["code"]
             .toString()

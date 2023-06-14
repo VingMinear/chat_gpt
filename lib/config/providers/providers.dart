@@ -6,11 +6,15 @@ import 'package:chat_gpt/utils/helper/network_service.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
+import '../../utils/controller/web_view_provider.dart';
+
 class AppProviders {
   final List<SingleChildWidget> _providers = [
-    ChangeNotifierProvider(create: (_) => HomeProvider()),
+    ChangeNotifierProvider(
+        create: (_) => HomeProvider()..getLangLocalStorage()),
     ChangeNotifierProvider(create: (_) => TokenProvider()),
     ChangeNotifierProvider(create: (_) => SplashScreenProvider()),
+    ChangeNotifierProvider(create: (_) => WebViewProvider()),
     StreamProvider(
       create: (_) => NetworkService().streamController.stream,
       initialData: NetworkStatus.online,

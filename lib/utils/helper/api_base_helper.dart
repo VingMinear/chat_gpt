@@ -20,7 +20,7 @@ class ApiBaseHelper extends GetConnect {
   final String _baseurl = "https://api.openai.com/v1/";
   // final String _baseurl = "https://api.pawan.krd/v1/";
   // final String _organization = "org-Cs1eK5ltL4mAjPP4nGJpmPl2";
-  String _token = "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";
+  String _token = "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";
   set token(String token) {
     _token = token;
     debugPrint("token has been set > $_token");
@@ -96,9 +96,12 @@ class ApiBaseHelper extends GetConnect {
         return responseJson;
       case 404:
         debugPrint('404');
-        return Future.error(ErrorModel(
+        return Future.error(
+          ErrorModel(
             statusCode: response.statusCode,
-            bodyString: json.decode(response.bodyString!)));
+            bodyString: json.decode(response.bodyString!),
+          ),
+        );
       case 400:
         debugPrint('400');
         return Future.error(
@@ -110,9 +113,13 @@ class ApiBaseHelper extends GetConnect {
       case 401:
         debugPrint('401');
 
-        // UserSharedPreferences.removeToken();
+        return Future.error(
+          ErrorModel(
+            statusCode: response.statusCode,
+            bodyString: json.decode(response.bodyString!),
+          ),
+        );
 
-        break;
       case 403:
         debugPrint('403');
         return Future.error(
